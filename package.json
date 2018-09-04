@@ -1,0 +1,22 @@
+{
+  "name": "tinyappproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Archaicghost/tinyAppProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Archaicghost/tinyAppProject/issues"
+  },
+  "homepage": "https://github.com/Archaicghost/tinyAppProject#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
