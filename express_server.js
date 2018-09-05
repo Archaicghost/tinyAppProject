@@ -45,15 +45,7 @@ app.listen(PORT, () => {
 });
 
 //Add new urls with create url
-app.post("/urls", (req, res) => {
-     
-    var makeShortUrl = generateRandomString();
-    var myShortURL = makeShortUrl
-    var makeLongString = req.body['longURL']
-    urlDatabase[makeShortUrl] = makeLongString
-    res.redirect("/urls/" + myShortURL)
-    // res.send(makeShortUrl + ": " + req.body['longURL']);     
-  });
+
 
 
   function generateRandomString() {
@@ -65,6 +57,15 @@ for (let i = 0; i < 6 ; i++) {
 return randomKey;
 }
 
+app.post("/urls", (req, res) => {
+     
+  var makeShortUrl = generateRandomString();
+  var myShortURL = makeShortUrl
+  var makeLongString = req.body['longURL']
+  urlDatabase[makeShortUrl] = makeLongString
+  res.redirect("/urls/" + myShortURL)
+  // res.send(makeShortUrl + ": " + req.body['longURL']);     
+});
 
    // Delete existing url
    app.post('/urls/:id/delete', (req, res) => {
@@ -79,11 +80,11 @@ return randomKey;
     urlDatabase[targetId] = req.body['longURL']
     res.redirect('/urls/')
   });
+
+
+  
   
 
-
-
-// })
 
 
 //recieve new url
