@@ -1,3 +1,4 @@
+//Worked with bguids91 and alefiyaV
 var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
@@ -21,6 +22,7 @@ app.get("/urls", (req, res) => {
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+
     
 app.get("/urls/new", (req, res) => {
 res.render("urls_new");
@@ -28,7 +30,6 @@ res.render("urls_new");
 
 app.get("/urls/:id", (req, res) => {
     let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
-        console.log(req.param.id)
     res.render("urls_show", templateVars);
     
     });
@@ -42,8 +43,12 @@ app.listen(PORT, () => {
 });
 
 app.post("/urls", (req, res) => {
-    console.log(req.body[`longURL`]);  // debug statement to see POST parameters
-    res.send(generateRandomString(req.body));         // Respond with 'Ok' (we will replace this)
+     
+    var makeShortUrl = generateRandomString();
+    var makeLongString = req.body['longURL']
+    urlDatabase[makeShortUrl] = makeLongString
+    res.redirect("/urls/" + makeShortUrl)
+    // res.send(makeShortUrl + ": " + req.body['longURL']);     
   });
 
 
@@ -56,14 +61,16 @@ for (let i = 0; i < 6 ; i++) {
 return randomKey;
 }
 
-
 app.get("/u/:shortURL", (req, res) => {
-    // let longURL = 
-    res.redirect()
-  });
+  let longURL = urlDatabase[req.params.shortURL];
+     res.redirect(longURL);
+   });
 
 
 //recieve new url
 //attach random string to url
 //add url and random string to database
 //respond with redirection to shortURL
+
+
+//Worked with bguids91 and alefiyaV
