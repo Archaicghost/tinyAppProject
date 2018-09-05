@@ -16,20 +16,18 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
     // res.send(req.params.id)
     let templateVars = { urls : urlDatabase};
-    for(let key in urlDatabase) {
-        console.log(urlDatabase[key])
-    }
+    // for(let key in urlDatabase) {
+    //     console.log(urlDatabase[key])
+    res.render("urls_index", templateVars)
+    });
 
 app.get("/urls/:id", (req, res) => {
-    // res.send(req.params.id)
-    let id = req.param('id')
-    let templateVars = { shortURL: req.params.id };
+    let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
+        console.log(req.param.id)
     res.render("urls_show", templateVars);
-    });
     
-
-    res.render("urls_index", templateVars);
-  });
+    });
+  
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
@@ -37,4 +35,7 @@ app.get("/hello", (req, res) => {
   
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
-})
+});
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));

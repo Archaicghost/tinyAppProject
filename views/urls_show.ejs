@@ -3,14 +3,9 @@
 <head>
   <title>TinyApp</title>
 </head>
+<%- include partials/_header.ejs %>
 <body>
         <h1>Here are URLS</h1>
-        <ul>
-       <% for (let key in urls/:id) { %>
-        <li><%= shortURL %> </li>
-       <% } %>
-       </ul>
-
-       
+        <%= longURL %> : <%= shortURL %>
 </body>
 </html>
