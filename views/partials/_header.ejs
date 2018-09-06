@@ -1,16 +1,18 @@
 
-<% if (username === undefined) { %>
+<% if (!username) { %>
 
-    <form name="username" action="/login" Method="POST">
-        <input type="text" placeholder="username" name="username">
-            <button type ="submit">submit</button>
-    </form>
+    <form name='username' action='/login' Method='POST'>
+        <input type='text' placeholder='username' name='username'>
+        <form name='password' action='/login' Method='POST'>
+            <input type='password' placeholder='password' name='password'>
+            <button type ='submit'>submit</button>
+    </form>   
   
     <% }else { %>
 
     <h5><p> Hello, <%= username %> </p> </h5>
-        <form method="POST" action="/logout">
-            <input type="submit" value="Logout">
+        <form method='POST' action='/logout'>
+            <input type='submit' value='Logout'>
     </form> 
         
         <% }; %>

@@ -17,6 +17,19 @@ var urlDatabase = {
  '9sm5xK': 'http://www.google.com'
 };
 
+const users = { 
+  'userRandomID': {
+    id: 'userRandomID', 
+    email: 'user@example.com', 
+    password: 'purple-monkey-dinosaur'
+  },
+ 'user2RandomID': {
+    id: 'user2RandomID', 
+    email: 'user2@example.com', 
+    password: 'dishwasher-funk'
+  }
+}
+
 
 //
 app.get('/', (req, res) => {
@@ -31,7 +44,7 @@ if (req.cookies){
     urls: urlDatabase,
   };
 
-  console.log(templateVars.username)
+ 
   res.render('urls_index', templateVars);
   });
  
@@ -50,13 +63,38 @@ app.get('/urls', (req, res) => {
       urls: urlDatabase,
     };
   
-    console.log(templateVars);
+  
     res.render('urls_index', templateVars)
     });
 
     //Accept Form info
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
+
+
+//Create account/register page
+app.get('/urls/register', (req, res) => {
+  let username = req.cookies.username
+  if (req.cookies){
+     username = req.cookies.username
+  } else {
+    res.sendStatus(404)
+    username = undefined };
+  
+    let templateVars = {
+      username: username,
+      urls: urlDatabase,
+    };
+
+if (req.body.email === " " || req.body.password === " ")
+
+
+
+
+    
+  
+res.render('urls_register', templateVars);
+});
 
 
 //Create New Urls
@@ -81,6 +119,7 @@ app.get('/urls/:id', (req, res) => {
   let username = req.cookies.username
   let shortURL = req.params.id
   let longURL = urlDatabase[shortURL]
+  
   if (req.cookies){
      username = req.cookies.username
   } else {
@@ -91,11 +130,11 @@ app.get('/urls/:id', (req, res) => {
       urls: urlDatabase,
       shortURL: shortURL,
       longURL: longURL
-
     };
   
     res.render('urls_show', templateVars);
     });
+
 
 //Redirect to longurl website with short URl
 app.get('/u/:shortURL', (req, res) => {
@@ -117,6 +156,21 @@ for (let i = 0; i < 6 ; i++) {
 }
 return randomKey;
 }
+
+app.post('/urls/register', (req, res) => {
+let username = req.body.username;
+let password = req.body.password;
+let id = generateRandomString();
+
+let newUser = {id: id, email: username, password: password}
+users[id] = newUser
+
+
+res.cookie('user_ID', id)
+
+res.redirect('/urls')
+
+});
 
 //Utalizing random string to create new URL
 app.post('/urls', (req, res) => {

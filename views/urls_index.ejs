@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
   <title>TinyApp</title>
 </head>
@@ -12,14 +12,15 @@
       <ul>
        <% for (let key in urls) { %>
         <li> <%= key %> - <%= urls[key] %>  href='#'
-          <form method="GET" action="/urls/<%= key %>"><button type="submit">Edit</button></form>
-            <form method="POST" action="/urls/<%= key %>/delete"><button type ="submit">Delete</button></form>
+          <form method='GET' action='/urls/<%= key %>'><button type='submit'>Edit</button></form>
+            <form method='POST' action='/urls/<%= key %>/delete'><button type ='submit'>Delete</button></form>
        <% } %></li>
       </ul>
       
 
-       <a href="/urls/new">Add New URL</a>  
-
+       <a href='/urls/new'>Add New URL</a>  
+       <a href='/urls/register'>Register Now</a>  
+       
        
 </body>
 </html>
