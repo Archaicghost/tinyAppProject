@@ -28,26 +28,25 @@ app.get("/urls/new", (req, res) => {
 res.render("urls_new");
 });
 
+//Showing Current Urls in UrlDatabase
 app.get("/urls/:id", (req, res) => {
     let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
 
     res.render("urls_show", templateVars);
     });
 
+//Redirect to longurl website with short URl
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
     
-  
+//Listening Local Host Port  
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-//Add new urls with create url
-
-
-
+//Random String for ShortUrl Genorator
   function generateRandomString() {
     let randomKey = "";
     let character = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
@@ -57,14 +56,14 @@ for (let i = 0; i < 6 ; i++) {
 return randomKey;
 }
 
+//Utalizing random string to create new URL
 app.post("/urls", (req, res) => {
      
   var makeShortUrl = generateRandomString();
   var myShortURL = makeShortUrl
   var makeLongString = req.body['longURL']
   urlDatabase[makeShortUrl] = makeLongString
-  res.redirect("/urls/" + myShortURL)
-  // res.send(makeShortUrl + ": " + req.body['longURL']);     
+  res.redirect("/urls/" + myShortURL) 
 });
 
    // Delete existing url
@@ -74,23 +73,20 @@ app.post("/urls", (req, res) => {
     res.redirect('/urls');
   });
 
-
+// edit url
   app.post('/urls/:id/edit', (req, res)=> {
     let targetId = req.params.id;
     urlDatabase[targetId] = req.body['longURL']
     res.redirect('/urls/')
   });
 
+  // res.cookie('userid','rohit');
 
-  
-  
+  app.post('/login', (req, res)=> {
+    res.cookie('username', req.body.username);
+    res.redirect('/urls');
+  });
 
+// res.cookie
 
-
-//recieve new url
-//attach random string to url
-//add url and random string to database
-//respond with redirection to shortURL
-
-
-//Worked with bguids91 and alefiyaV
+//create cookie with res.cookie
