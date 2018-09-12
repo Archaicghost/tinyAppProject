@@ -1,18 +1,14 @@
+<!-- <%= JSON.stringify(locals) %> -->
+<% if (!locals.users) { %>
 
-<% if (!username) { %>
-
-    <form name='username' action='/login' Method='POST'>
-        <input type='text' placeholder='username' name='username'>
-        <form name='password' action='/login' Method='POST'>
-            <input type='password' placeholder='password' name='password'>
-            <button type ='submit'>submit</button>
-    </form>   
+    <a href='/urls/register'>Register Now</a>  
+    <a href='/urls/login'>Login Now</a>  
   
     <% }else { %>
 
-    <h5><p> Hello, <%= username %> </p> </h5>
+    <h5><p> Hello, <%= locals.users['email'] %> </p> </h5>
         <form method='POST' action='/logout'>
             <input type='submit' value='Logout'>
-    </form> 
-        
-        <% }; %>
+        </form>
+
+    <% }; %>
