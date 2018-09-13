@@ -19,17 +19,6 @@ app.use(cookieSession({
 // **Cookie Options**
   maxAge: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
 }));
-// app.use(session({
-//   secret: 'keyboard cat',
-//   resave: false,
-//   saveUnitialized: true,
-//   cookie: { secure: true }
-// }));
-// app.use(function (req, res, next) {
-//   res.locals.messages = require('express-messages')(req, res);
-//   next();
-// });
-
 
 //Listening Local Host Port  
 app.listen(PORT, () => {
@@ -59,7 +48,7 @@ const users = {
 //Random String for ShortUrl Genorator
 function generateRandomString() {
   let randomKey = '';
-  let character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+  let character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz'
 
   for (let i = 0; i < 6 ; i++) {
     randomKey += character.charAt(Math.floor(Math.random() * character.length));
@@ -68,32 +57,27 @@ function generateRandomString() {
 };
 
 //Verification of Username/Email to Database
-function findUser(username){
+function findUser(email){
 
-  for (let keys in users) { 
-    if (users[keys].username === username)
-      return true;
+  for (let key in users) { 
+    if (users[key].email === email)
+      return users[key] ;
   }
 };
 
-// //Verify user
-function credentialCheck(email, pass) {
-  for(let keys in users) {
-    if(users[keys].email === email && users[key].password === pass) {
-      return user[keys]
-    }
-  };
+//Urls created by user
+function urlsForUser(id) {
+  let userUrls = {};
+  for (key in urlDatabase) {
+  userUrls[key] = urlDatabase[key]
+
+  if (urlDatabase[key] === id);{
+    userUrls[key] = urlDatabase[key]
+  }
+}
+  return userUrls
 }
 
-// //Urls create by user
-// function createNewUrls(id)
-// let userKeys = urlDatabase[keys]
-// let createdUrls = {};
-//   if (userKeys = id);
-//     userKeys = userKeys
-//   }
-// }
-// return createdUrls
 
 //*************GET Requests*************
 
@@ -104,29 +88,25 @@ app.get('/urls/register', (req, res) => {
   let templateVars = {
     users: userEmail,
     urls: urlDatabase,
-   
   };
-  
   res.render("urls_register", templateVars);
   });
 
 //List all the Tiny Url's and Long Url's
 app.get('/urls', (req, res) => {
-   let userEmail = req.session.email
+   let userEmail = req.session.user_id
    if (req.session.user_id){
        userEmail = users[req.session.user_id]; 
      
     
    } else {
        userEmail = undefined 
-   };
+   }
    let templateVars = {
      users: userEmail,
      urls: urlDatabase,
-   };
-  
-
-  res.render('urls_index', templateVars);
+   }
+  res.render('urls_index', templateVars); //xxxx
 });
 
 //Login
@@ -135,61 +115,58 @@ app.get('/urls/login', (req, res) => {
   let templateVars = {
     users: userEmail,
     urls: urlDatabase,
-   
   };
-
-  
   res.render("urls_login", templateVars);
-  });
+});
+
+//Create New Urls
+app.get('/urls/new', (req, res) => {
+  let userEmail = req.session.user_id;
+  let templateVars = {
+    users: userEmail,
+    urls: urlDatabase, 
+  }
+  if (users[req.session.user_id]) { 
+      userEmail = req.session.user_id;
+      } else { 
+      userEmail = undefined
+     };
+     res.render('urls_new', templateVars); 
+});
 
 //Display the Long Url and its Shortened Form
 app.get('/urls/:id', (req, res) => {
   let userEmail = req.session.user_id
   let shortURL = req.params.id
   let longURL = urlDatabase[shortURL]
+
   if (req.session.user_id){
       userEmail = users[req.session.user_id];
-      //username = req.cookies.user_id
+      userUrls = urlsForUser(userEmail)
   } else {
       userEmail = undefined 
-  };
+  }
   
     let templateVars = {
       users: userEmail,
-      urls: urlDatabase,
+      urls: userUrls,
       longURL: longURL,
       shortURL: shortURL,
-    };
+    }
   
   res.render('urls_show', templateVars);
 });
 
-//Create New Urls
-app.get('/urls/new', (req, res) => {
-  let userEmail = req.session.user_id
-  if (req.session.user_id){
-      userEmail = users[req.session.user_id];
-      //username = req.cookies.user_id
-  } else {
-      userEmail = undefined 
-  };
-  console.log(req.session.user_id)
-  let templateVars = {
-    users: userEmail,
-    urls: urlDatabase,
-  };
-  
-  res.render('urls_new', templateVars);
-});
 
 app.get('/', (req, res) => {
   let userEmail = req.session.email
+  let shortURL = req.params.id;
   let templateVars = {
     users: userEmail,
     urls: urlDatabase,
+    shortURL: shortURL
   };
 
- console.log(templateVars.users)
  res.render('urls_index', templateVars);
  });
 
@@ -200,14 +177,13 @@ app.get('/urls/:id', (req, res) => {
   let userEmail = req.session.user_id;
   if (req.session){
       userEmail = users[req.session.user_id];
-    
+      userUrls = urlsForUser(userEmail)
   } else {
       userEmail = undefined 
   };
     let templateVars = {
-
       users: userEmail,
-      urls: urlDatabase,
+      urls: userUrls,
       shortURL: shortURL,
       longURL: longURL
     };
@@ -218,38 +194,37 @@ app.get('/urls/:id', (req, res) => {
 
 //Redirect to longurl website with short URl
 app.get('/u/:shortURL', (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+  let shortURL = req.params.shortURL;
+  let longURL = urlDatabase[shortURL]
+  res.redirect('http://www.' + longURL);///xxxx
 });
 
 
 //*************POST Requests*************
 //cookie login
 app.post('/urls/login', (req, res)=> {
-  credentialCheck(user);
   let email = req.body.email;
   let password = req.body.password;
-  let hashPass = bcrypt.hashSync(password, 10);
+  let user = findUser(email)
   
-  for (let user in users) {
-        if (users[user].password === hashPass &&req.body.email === users[user].email) {
-          user = users['email']
-           res.redirect('/urls');
-      }
-  //Prevent duplicate emails
-    } if (email === '' || password === '' ) {
-    res.send('Error: 400 Bad Request - Email or password cannot be empty!')
+    if (user && bcrypt.compareSync(password, user.password)) {
+      req.session.user_id = user.id
+      res.redirect('/urls')
+      console.log('I checked password')
 
-  } else { 
-    res.redirect('/login');
+    } else if (email === '' || password === '' ) {
+      res.send('Error: 400 Bad Request - Email or password cannot be empty!')
+
+    } else { 
+      res.redirect('/urls/login');
     
-  } 
+    } 
 
 });
 
 
 //cookie logout
-app.post('/logout', (req, res)=> {
+app.post('/logout', (req, res) => {
   req.session = null
   res.redirect('/urls');
 });
@@ -257,11 +232,10 @@ app.post('/logout', (req, res)=> {
 
 // Registration Requirments
 app.post('/urls/register', (req, res) => {
-console.log("I am here");
 
   let email = req.body.email;
   let password = req.body.password;
-  let foundUser = findUser(users)
+  let foundUser = findUser(email) ? true : false
   let hashPass = bcrypt.hashSync(password, 10);
   
 
@@ -274,13 +248,10 @@ console.log("I am here");
     res.send('Error: 400 Bad Request - Email already in use!')
   } 
    let id = generateRandomString();
-  let newUser = {id: id, email: email, password: hashPass};
-console.log(newUser, "hihih");
-      users[id] = {id: id, email: email, password: hashPass};
+    let newUser = {id: id, email: email, password: hashPass};
+      users[id] = newUser
   
       req.session.user_id = id;
-console.log(users, "lolololol");
-console.log(newUser, "hahahaha") 
 res.redirect('/urls')
 });
 
@@ -290,7 +261,8 @@ app.post('/urls', (req, res) => {
   var myShortURL = makeShortUrl
   var makeLongString = req.body['longURL']
 
-    urlDatabase[myShortURL] = makeLongString
+    urlDatabase[myShortURL] = {longURL: makeLongString}
+    
 
   res.redirect('/urls/' + myShortURL) 
 });

@@ -7,19 +7,20 @@
 <body>
     <%- include partials/_header.ejs %>
 
-        <h1>Here are all Urls</h1>
-       
-      <ul>
-       <% for (let keys in urls) { %>
-        <li> <%= keys %> - <a href='<%= urls[keys] %>'><%= urls[keys] %></a>  
-          <form method='GET' action='/urls/<%= keys %>'><button type='submit'>Edit</button></form>
-            <form method='POST' action='/urls/<%= keys %>/delete'><button type ='submit'>Delete</button></form>
-       <% } %></li>
-      </ul>
-      
+  
+    <h1>My Tiny App</h1>
+    <% if (!locals.users) { %>
 
+      <h2>Please login or register to use!</h2>
+    
+      <% }else { %>
+        <a href='/urls/new'>Add New URL</a> 
+        <a href='/urls/show'>View URL's</a> 
+      <% }; %>
+    
+<!-- 
        <a href='/urls/new'>Add New URL</a>  
-       <a href='/urls/register'>Register Now</a>  
+       <a href='/urls/register'>Register Now</a>   -->
         
        
 </body>

@@ -8,14 +8,33 @@
     <%- include partials/_header.ejs %>
 
     <h1>This is show page</h1>
+  
+    <% if (!locals.users) { %>
 
-    <form action='/urls/<%= shortURL %>/edit' method='POST' style='margin:150px;'>
-        <input id='longURL' type='text' name='longURL' placeholder='http://' style='width: 300px'>
-        <input type='submit' value='Submit'></form> <br>
-
-    <h2>Tiny URL</h2>
-
+        <h2>Please login to veiw or change Urls!</h2>
+    
+      <% }else { %>
+        <h1>Here are all your Urls</h1>
+      <p>
+            <% for (let keys in urls) { %>
+             <li> <%= keys %> - <a href='<%= urls[keys] %>'><%= urls[keys] %></a>  
+               <form method='GET' action='/urls/<%= keys %>'><button type='submit'>Edit</button></form>
+                    <form method='POST' action='/urls/<%= keys %>/delete'><button type ='submit'>Delete</button></form>
+                        </li>
+                      </p>
+            <% } %>
         
+  
+      <% }; %>
+
+    
+    <a href='/urls/new'>Add New URL</a>  
+   
+   
+       
+
+  
+    
 </body>
 </html>
 
