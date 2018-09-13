@@ -92,18 +92,18 @@ app.get('/urls/register', (req, res) => {
 
 //List all the Tiny Url's and Long Url's
 app.get('/urls', (req, res) => {
+
    let userEmail = req.session.user_id
+  
    if (req.session.user_id){
-       userEmail = users[req.session.user_id]; 
-     
-    
+       userEmail = users[req.session.user_id];  
    } else {
        userEmail = undefined 
-   }
-   let templateVars = {
-     users: userEmail,
-     urls: urlDatabase,
-   }
+  }
+  let templateVars = {
+    users: userEmail,
+    urls: urlDatabase,
+  };
   res.render('urls_index', templateVars); //xxxx
 });
 
@@ -120,15 +120,16 @@ app.get('/urls/login', (req, res) => {
 //Create New Urls
 app.get('/urls/new', (req, res) => {
   let userEmail = req.session.user_id;
-  let templateVars = {
-    users: userEmail,
-    urls: urlDatabase, 
-  }
+
   if (users[req.session.user_id]) { 
       userEmail = req.session.user_id;
       } else { 
       userEmail = undefined
      };
+     let templateVars = {
+      users: userEmail,
+      urls: urlDatabase, 
+    }
      res.render('urls_new', templateVars); 
 });
 
@@ -172,18 +173,19 @@ app.get('/urls/:id', (req, res) => {
   let shortURL = req.params.id;
   let longURL = req.body['longURL'];
   let userEmail = req.session.user_id;
+  let templateVars = {
+    users: userEmail,
+    urls: userUrls,
+    shortURL: shortURL,
+    longURL: longURL
+  };
   if (req.session){
       userEmail = users[req.session.user_id];
       userUrls = urlsForUser(userEmail)
   } else {
       userEmail = undefined 
   };
-    let templateVars = {
-      users: userEmail,
-      urls: userUrls,
-      shortURL: shortURL,
-      longURL: longURL
-    };
+    
   
     res.render('urls_show', templateVars);
     });

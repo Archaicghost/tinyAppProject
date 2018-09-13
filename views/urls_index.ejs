@@ -14,8 +14,17 @@
       <h2>Please login or register to use!</h2>
     
       <% }else { %>
+        <p>
+          <% for (let keys in urls) { %>
+           <li> <%= keys %> - <a href='<%= urls[keys] %>'><%= urls[keys].longURL  %></a>  
+             <form method='GET' action='/urls/<%= keys %>'><button type='submit'>Edit</button></form>
+                  <form method='POST' action='/urls/<%= keys %>/delete'><button type ='submit'>Delete</button></form>
+                      </li>
+                    </p>
+          <% } %>
+      
         <a href='/urls/new'>Add New URL</a> 
-        <a href='/urls/show'>View URL's</a> 
+         
       <% }; %>
     
 <!-- 
