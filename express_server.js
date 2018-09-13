@@ -27,8 +27,8 @@ app.listen(PORT, () => {
 
 //Global Objects
 let urlDatabase = {
- 'b2xVn2': 'http://www.lighthouselabs.ca',
- '9sm5xK': 'http://www.google.com',
+ 'b2xVn2': {shortURL:'b2xVn2', user_id: 'userRandomID', longURL: 'http://www.lighthouselabs.ca'},
+ '9sm5xK': {shortURL:'9sm5xK', user_id: 'user2RandomID', longURL: 'http://www.google.com'},
 };
 const users = { 
   'userRandomID': {
@@ -67,17 +67,15 @@ function findUser(email){
 
 //Urls created by user
 function urlsForUser(id) {
-  let userUrls = {};
-  for (key in urlDatabase) {
-  userUrls[key] = urlDatabase[key]
-
-  if (urlDatabase[key] === id);{
-    userUrls[key] = urlDatabase[key]
+  let userURLS = {};
+  for (let key in urlDatabase) {
+    let url = urlDatabase[key]
+    if (url.user_id === id);{
+      userURLS[key] = url
+    }
   }
+  return userURLS
 }
-  return userUrls
-}
-
 
 //*************GET Requests*************
 
@@ -141,12 +139,11 @@ app.get('/urls/:id', (req, res) => {
   let longURL = urlDatabase[shortURL]
 
   if (req.session.user_id){
-      userEmail = users[req.session.user_id];
+      userEmail = req.session.user_id;
       userUrls = urlsForUser(userEmail)
   } else {
       userEmail = undefined 
   }
-  
     let templateVars = {
       users: userEmail,
       urls: userUrls,
@@ -256,13 +253,14 @@ res.redirect('/urls')
 
 //Useing random string to create new URL
 app.post('/urls', (req, res) => {
-  var makeShortUrl = generateRandomString();
-  var myShortURL = makeShortUrl
-  var makeLongString = req.body['longURL']
+  let makeShortUrl = generateRandomString();
+  let myShortURL = makeShortUrl
+  let makeLongString = req.body['longURL']
 
-    urlDatabase[myShortURL] = makeLongString
+  urlDatabase[myShortURL] =  {shortURL: myShortURL, user_id: req.session.user_id, longURL: makeLongString};
    
-
+   console.log('sloop', urlDatabase, 'blup')
+   console.log(myShortURL, 'nloop')
   res.redirect('/urls/' + myShortURL) 
 });
 

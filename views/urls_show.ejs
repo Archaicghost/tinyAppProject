@@ -15,9 +15,10 @@
     
       <% }else { %>
         <h1>Here are all your Urls</h1>
+        <!-- <p><%= JSON.stringify(urls) %></p> -->
       <p>
             <% for (let keys in urls) { %>
-             <li> <%= keys %> - <a href='<%= urls[keys] %>'><%= urls[keys] %></a>  
+             <li> <%= keys %> - <a href='<%= urls[keys] %>'><%= urls[keys].longURL  %></a>  
                <form method='GET' action='/urls/<%= keys %>'><button type='submit'>Edit</button></form>
                     <form method='POST' action='/urls/<%= keys %>/delete'><button type ='submit'>Delete</button></form>
                         </li>
