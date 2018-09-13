@@ -154,7 +154,7 @@ app.get('/urls/:id', (req, res) => {
       shortURL: shortURL,
     }
   
-  res.render('urls_show', templateVars);
+  res.render('urls_show', templateVars); //xxxx
 });
 
 
@@ -210,7 +210,6 @@ app.post('/urls/login', (req, res)=> {
     if (user && bcrypt.compareSync(password, user.password)) {
       req.session.user_id = user.id
       res.redirect('/urls')
-      console.log('I checked password')
 
     } else if (email === '' || password === '' ) {
       res.send('Error: 400 Bad Request - Email or password cannot be empty!')
@@ -261,8 +260,8 @@ app.post('/urls', (req, res) => {
   var myShortURL = makeShortUrl
   var makeLongString = req.body['longURL']
 
-    urlDatabase[myShortURL] = {longURL: makeLongString}
-    
+    urlDatabase[myShortURL] = makeLongString
+   
 
   res.redirect('/urls/' + myShortURL) 
 });
